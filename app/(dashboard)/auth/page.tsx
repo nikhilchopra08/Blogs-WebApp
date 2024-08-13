@@ -1,19 +1,51 @@
 "use client"
 
 import Input from "@/Components/input";
+import axios from "axios";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { Router } from "next/router";
 import { useCallback, useState } from "react";
 
 const Auth = () => {
-    const [name , setName] = useState('');
+    const router = useRouter();
+    const [username , setUsername] = useState('');
     const [email , setEmail] = useState('');
     const [password , setPassword] = useState('');
 
     const [variant , setVariant] = useState('login');
 
     const toggleVariant = useCallback(() => {
-        setVariant((currentVariant) => currentVariant === 'login' ? 'Register' : 'login')
+        setVariant((currentVariant) => currentVariant === 'login' ? 'register' : 'login')
     } , [])
 
+    const register = useCallback(async () => {
+        try{
+            await axios.post('/api/register' , {
+                email,
+                username,
+                password
+            });
+            login();
+        }catch(e){
+            console.log(e);
+        }
+    } , [email , username , password]);
+
+    const login = useCallback(async () => {
+        try{
+            await signIn("credentials" , {
+                email,
+                password,
+                redirect: false,
+                callbackUrl : ''
+            })
+
+            router.push('/');
+        }catch(e){
+            console.log(e);
+        }
+    } , [email , password , router])
 
     return(
         <div className="relative bg-slate-50 h-[100vh] w-[100vw]">
@@ -28,12 +60,12 @@ const Auth = () => {
                             {variant == 'login' ? 'Login' : 'Register'}
                         </h1>
                         <div className="flex flex-col gap-4">
-                            {variant === 'login' && (
+                            {variant === 'register' && (
                                 <Input 
-                                    label="name"
-                                    onChange={(e : any) => setName(e.target.value)}
-                                    id="name"
-                                    value={name}
+                                    label="username"
+                                    onChange={(e : any) => setUsername(e.target.value)}
+                                    id="username"
+                                    value={username}
                                 />
                             )}
                                 <Input 
@@ -49,6 +81,9 @@ const Auth = () => {
                                     value={password}
                                 />
                         </div>
+                        <button onClick={variant === 'login' ? login : register} className="bg-blue-600 py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition">
+                            {variant === 'login' ? 'Login' : 'Sign up'}
+                        </button>
                         <button className="bg-green-500" onClick={toggleVariant}>Toggle</button>
                     </div>
                 </div>
