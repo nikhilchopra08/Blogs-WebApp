@@ -25,21 +25,21 @@ model User {
 }
 
 model Post {
-  id          Int       @id @default(autoincrement())
+  id          String       @id @default(uuid())
   title       String
   content     String
   author      User?     @relation("PostAuthor", fields: [authorId], references: [id])
   authorId    String?   // Changed to String to match User.id
   created_at  DateTime  @default(now())
   updated_at  DateTime  @updatedAt
-  comments    Comment[]
+  // comments    Comment[]
   categories  Category[] @relation("PostCategory")
 }
 
 model Comment {
   id          Int       @id @default(autoincrement())
   content     String
-  post        Post      @relation(fields: [postId], references: [id])
+  // post        Post      @relation(fields: [postId], references: [id])
   postId      Int
   author      User?     @relation("CommentAuthor", fields: [authorId], references: [id])
   authorId    String?   // Changed to String to match User.id

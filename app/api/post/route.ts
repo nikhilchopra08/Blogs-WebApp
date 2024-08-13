@@ -1,4 +1,10 @@
+import { AuthOptions } from "@/lib/auth";
 import prismadb from "@/lib/prismadb";
+import serverAuth from "@/lib/serverauth";
+import { NextApiRequest, NextApiResponse } from "next";
+import { getServerSession } from "next-auth";
+import { getSession } from "next-auth/react";
+import { NextRequest, NextResponse } from "next/server";
 
 // Define the type for the expected request body
 interface PostBody {
@@ -7,10 +13,17 @@ interface PostBody {
   author: string;
 }
 
-export async function POST(req: Request) {
+export async function POST(req: NextApiRequest , res: NextApiResponse) {
   try {
-    // Parse the request body
-    const body: PostBody = await req.json();
+
+    const session = await getSession({ req });
+
+    if (!session || !session.user) {
+      // User is not authenticated
+      return NextResponse.json({ error: "You must be logged in to create a post" });
+    }
+
+    const body: PostBody = await req.body;
 
     // Destructure the body
     const { title, content, author } = body;
@@ -40,5 +53,15 @@ export async function POST(req: Request) {
         "Content-Type": "application/json",
       },
     });
+  }
+}
+
+export async function GET(req: Request) {
+  try{
+    const posts = await prismadb.post.findMany({});
+
+    return new Response(JSON.stringify(posts))
+  }catch(e){
+    console.log(e);
   }
 }
