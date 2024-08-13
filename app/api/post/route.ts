@@ -1,67 +1,58 @@
-import { AuthOptions } from "@/lib/auth";
+import { NextRequest, NextResponse } from "next/server";
 import prismadb from "@/lib/prismadb";
 import serverAuth from "@/lib/serverauth";
-import { NextApiRequest, NextApiResponse } from "next";
-import { getServerSession } from "next-auth";
-import { getSession } from "next-auth/react";
-import { NextRequest, NextResponse } from "next/server";
+import { NextApiRequest } from "next";
 
-// Define the type for the expected request body
-interface PostBody {
-  title: string;
-  content: string;
-  author: string;
-}
-
-export async function POST(req: NextApiRequest , res: NextApiResponse) {
+export async function POST(req: NextRequest , reqq : NextApiRequest) {
   try {
 
-    const session = await getSession({ req });
+    // const session = await getServerSession(req, AuthOptions);
 
-    if (!session || !session.user) {
-      // User is not authenticated
-      return NextResponse.json({ error: "You must be logged in to create a post" });
+    const currentUser = await serverAuth(reqq);
+
+    if (!currentUser) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    const body: PostBody = await req.body;
+    const { title, content } = await req.json();
 
-    // Destructure the body
-    const { title, content, author } = body;
+    if (!title) {
+      return NextResponse.json({ message: "Enter Title" }, { status: 400 });
+    }
 
-    // Create a new post in the database
+    if (!content) {
+      return NextResponse.json({ message: "Enter Content" }, { status: 400 });
+    }
+
+    const authorId = currentUser.currentUser.id;
+    // if (!author) {
+    //   return NextResponse.json({ message: "Enter Author" }, { status: 400 });
+    // }
+
     const post = await prismadb.post.create({
       data: {
         title,
         content,
+        authorId
       },
     });
 
-    // Return a successful response
-    return new Response(JSON.stringify(post), {
-      status: 201, // Created
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    
+    console.log(post);
+    return NextResponse.json(post, { status: 201 });
   } catch (error) {
-    // Handle errors
     console.error("Error creating post:", error);
-    return new Response(JSON.stringify({ error: "Failed to create post" }), {
-      status: 500, // Internal Server Error
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
   }
 }
 
-export async function GET(req: Request) {
+export async function GET(req:NextRequest) {
   try{
-    const posts = await prismadb.post.findMany({});
+    const posts = await prismadb.post.findMany();
 
-    return new Response(JSON.stringify(posts))
-  }catch(e){
+    return NextResponse.json(posts);
+  }
+  catch(e){
     console.log(e);
+    return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
   }
 }

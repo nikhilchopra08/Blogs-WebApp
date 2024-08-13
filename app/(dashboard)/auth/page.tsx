@@ -4,7 +4,6 @@ import Input from "@/Components/input";
 import axios from "axios";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { Router } from "next/router";
 import { useCallback, useState } from "react";
 
 const Auth = () => {
