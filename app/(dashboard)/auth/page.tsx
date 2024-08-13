@@ -9,7 +9,7 @@ import { useCallback, useState } from "react";
 
 const Auth = () => {
     const router = useRouter();
-    const [username , setUsername] = useState('');
+    const [name , setName] = useState('');
     const [email , setEmail] = useState('');
     const [password , setPassword] = useState('');
 
@@ -23,14 +23,14 @@ const Auth = () => {
         try{
             await axios.post('/api/register' , {
                 email,
-                username,
+                name,
                 password
             });
             login();
         }catch(e){
             console.log(e);
         }
-    } , [email , username , password]);
+    } , [email , name , password]);
 
     const login = useCallback(async () => {
         try{
@@ -62,10 +62,10 @@ const Auth = () => {
                         <div className="flex flex-col gap-4">
                             {variant === 'register' && (
                                 <Input 
-                                    label="username"
-                                    onChange={(e : any) => setUsername(e.target.value)}
-                                    id="username"
-                                    value={username}
+                                    label="name"
+                                    onChange={(e : any) => setName(e.target.value)}
+                                    id="name"
+                                    value={name}
                                 />
                             )}
                                 <Input 

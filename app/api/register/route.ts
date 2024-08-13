@@ -4,9 +4,9 @@ import prismadb from "@/lib/prismadb"
 
 export async function POST(req:NextRequest) {
     try{
-        const {email , password , username} = await req.json();
+        const {email , password , name} = await req.json();
 
-        if (!email || !password || !username) {
+        if (!email || !password || !name) {
             return NextResponse.json({ error: "All fields are required" }, { status: 400 });
         }
 
@@ -24,7 +24,7 @@ export async function POST(req:NextRequest) {
 
         const user = await prismadb.user.create({
             data:{
-                username,
+                name,
                 email,
                 password_hash,
             },
