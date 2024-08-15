@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils'; // Assuming you have a utility function for co
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     variant?: 'primary' | 'secondary' | 'danger';
     isLoading?: boolean;
+    onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 const Button: React.FC<ButtonProps> = ({ 
@@ -11,6 +12,7 @@ const Button: React.FC<ButtonProps> = ({
     variant = 'primary', 
     isLoading = false, 
     className, 
+    onClick,
     ...props 
 }) => {
     const baseStyles = 'px-4 py-2 rounded text-white font-medium focus:outline-none';
@@ -27,6 +29,7 @@ const Button: React.FC<ButtonProps> = ({
         <button
             className={cn(baseStyles, variants[variant], loadingStyles, className)}
             disabled={isLoading || props.disabled}
+            onClick={onClick}
             {...props}
         >
             {isLoading ? 'Loading...' : children}

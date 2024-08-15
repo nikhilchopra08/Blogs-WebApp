@@ -18,11 +18,11 @@ const Input : React.FC<InputProps> = ({
   return (
     <div className="relative">
     <input
-        onChange={onChange}
-        type={type}
-        value={value}
-        id={id}
-        className="
+      onChange={onChange}
+      type={type}
+      value={value}
+      id={id}
+      className="
         block
         rounded-md
         px-6
@@ -36,13 +36,22 @@ const Input : React.FC<InputProps> = ({
         focus:outline-none
         focus:ring-0
         peer
-    "
-        placeholder=" "
+        border
+        border-neutral-600
+        focus:border-blue-500
+        transition-all
+        placeholder-transparent
+        focus:bg-neutral-600
+        disabled:bg-neutral-800
+        disabled:cursor-not-allowed
+      "
+      placeholder=" "
     />
     <label 
-    className="
+      className="
         absolute
         text-md
+        ml-4
         text-zinc-400
         duration-150
         transform
@@ -55,11 +64,13 @@ const Input : React.FC<InputProps> = ({
         peer-placeholder-shown:translate-y-0
         peer-focus:scale-75
         peer-focus:-translate-y-3
-    "
-    htmlFor="Email">
-        {label}
+        peer-disabled:text-neutral-500
+      "
+      htmlFor={id}
+    >
+      {label}
     </label>
-</div>
+  </div>  
   )
 }
 

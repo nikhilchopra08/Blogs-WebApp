@@ -20,8 +20,10 @@ export default function RootLayout({
     <html lang="en">
       <Providers>
         <body className={inter.className}>
-          <NavBar/>
+          {/* <NavBar/> */}
+          <div className="bg-[#fff9e6]">
           {children}
+          </div>
           </body>
       </Providers>
     </html>
