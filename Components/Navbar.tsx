@@ -31,7 +31,7 @@ const NavBar = () => {
             <div className='flex items-center justify-between mx-auto px-12 py-4'>
                 <div className='flex-grow'>
                     <Link href={"/"} className='text-2xl md:text-5xl text-white font-semiBold'>
-                        Nikhil
+                        Blogify
                     </Link>
                 </div>
                 <div className='mobile-menu block md:hidden'>

@@ -9,12 +9,12 @@ const Post = () => {
     const { data: session, status } = useSession();
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-    const [authorId, setAuthor] = useState('');
+    const [authorId, setAuthorId] = useState('');
 
     // Update author state when session data changes
     useEffect(() => {
         if (session?.user?.name) {
-            setAuthor(session.user.name);
+            setAuthorId(session.user.name);
         }
     }, [session]);
 
@@ -64,7 +64,7 @@ const Post = () => {
                 id="content"
                 value={content}
             />
-            <div className="text-white">{authorId}</div>
+            {/* <div className="text-white">{authorId}</div> */}
             <button onClick={post}>Post</button>
         </div>
     )

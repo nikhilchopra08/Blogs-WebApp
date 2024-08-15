@@ -83,7 +83,12 @@ export const BlogForm: React.FC<BlogProps> = ({ initialData }) => {
                                 <FormItem>
                                     <FormLabel>Title</FormLabel>
                                     <FormControl>
-                                        <Input disabled={loading} {...field} />
+                                        {/* <Input disabled={loading}  {...field} /> */}
+                                        <Input
+            {...field}
+            id="title"              // Provide id explicitly
+            label="Title"           // Provide label explicitly // Pass disabled state
+          />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -96,7 +101,12 @@ export const BlogForm: React.FC<BlogProps> = ({ initialData }) => {
                                 <FormItem>
                                     <FormLabel>Content</FormLabel>
                                     <FormControl>
-                                        <Input disabled={loading} {...field} />
+                                        {/* <Input disabled={loading} {...field} /> */}
+                                        <Input
+            {...field}
+            id="content"              // Provide id explicitly
+            label="Content"           // Provide label explicitly // Pass disabled state
+          />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
